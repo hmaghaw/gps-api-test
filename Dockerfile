@@ -1,9 +1,12 @@
+# syntax=docker/dockerfile:1.7
+
 # --- Build stage ---
 FROM node:20-alpine AS build
 WORKDIR /app
 
-COPY package.json ./
-RUN npm install
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 COPY . .
 RUN npm run build
@@ -16,3 +19,4 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 9001
 
 CMD ["nginx", "-g", "daemon off;"]
+
