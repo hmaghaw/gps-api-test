@@ -1,0 +1,6 @@
+services:
+  text-moderation-console:
+    build: .
+    ports:
+      - "9001:9001"
+    restart: unless-stopped
